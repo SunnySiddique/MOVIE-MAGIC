@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  @apply bg-neutral-900 text-neutral-300;
+  font-family: "Poppins", sans-serif;
+}
+
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.skeleton-loader {
+  background: linear-gradient(135deg, #202020, #444);
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+.poster-img {
+  box-shadow: rgba(0, 0, 0, 0.86) 0px 22px 40px 6px;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.9); /* Start slightly smaller */
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7); /* Black shadow */
+  }
+  50% {
+    transform: scale(1.1); /* Scale up more */
+    box-shadow: 0 0 0 15px rgba(0, 0, 0, 0); /* Stronger shadow effect */
+  }
+  100% {
+    transform: scale(0.9); /* End slightly smaller */
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
+}
+
+/* Apply the animation */
+.pulse-animation {
+  animation: pulse 2s linear infinite; /* Faster duration and linear timing */
+}
+
+.swiper-button-next:after,
+.swiper-rtl .swiper-button-prev:after,
+.swiper-button-prev:after,
+.swiper-rtl .swiper-button-next:after {
+  content: "" !important;
+}
+
+.override-transform {
+  position: absolute;
+  transform: translateY(-50%) !important;
+  top: 50%;
+  z-index: 100;
+}
+
+.auth-image {
+  animation: float 2.5s infinite ease-in-out;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
