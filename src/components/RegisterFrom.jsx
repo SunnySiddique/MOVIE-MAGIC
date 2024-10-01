@@ -36,10 +36,11 @@ const RegisterForm = () => {
 
     // Check for empty fields
     const emptyFields = [];
+    if (!file) emptyFields.push("Upload Image");
+    if (!displayName) emptyFields.push("Name");
     if (!formData.email) emptyFields.push("Email");
     if (!formData.password) emptyFields.push("Password");
-    if (!displayName) emptyFields.push("User Name");
-    if (!file) emptyFields.push("Upload Image");
+    if (!formData.confirmPassword) emptyFields.push("Confirm Password");
 
     // Show error message for empty fields
     if (emptyFields.length > 0) {
