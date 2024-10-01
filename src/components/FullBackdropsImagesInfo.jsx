@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
 import { ThumbsDown, ThumbsUp } from "lucide-react";
+import { useState } from "react";
+import { BiSolidDislike, BiSolidLike } from "react-icons/bi";
 import { FaLock } from "react-icons/fa";
 import { IoChevronDownOutline } from "react-icons/io5";
 import { toast } from "react-toastify";
@@ -8,9 +10,16 @@ import { useAPI } from "../context/APIContext";
 export default function FullBackdropsImagesInfo({ backdropsData }) {
   const { imageUrl } = useAPI();
   const handleOpen = () => window.open(imageUrl + backdropsData?.file_path);
+  const [icon, setIcon] = useState(false);
+  const [DisIcon, setDisIcon] = useState(false);
 
   const handleRated = () => {
     toast.success("The image has been rated successfully.");
+    setIcon((prev) => !prev);
+  };
+  const handleDisRated = () => {
+    toast.success("The image has been rated successfully.");
+    setDisIcon((prev) => !prev);
   };
 
   return (
@@ -30,10 +39,18 @@ export default function FullBackdropsImagesInfo({ backdropsData }) {
         <div className="absolute bottom-0 w-full flex justify-center items-center space-x-4">
           <div className="flex space-x-4 items-center justify-between w-full p-4 opacity-0 group-hover:opacity-100 group-hover:bg-[rgba(255,255,255,.7)] transition-opacity duration-300 ">
             <button className="text-black" onClick={handleRated}>
-              <ThumbsUp className="w-4 h-4" />
+              {icon ? (
+                <BiSolidLike className="w-4 h-4" />
+              ) : (
+                <ThumbsUp className="w-4 h-4" />
+              )}
             </button>
-            <button className="text-black" onClick={handleRated}>
-              <ThumbsDown className="w-4 h-4" />
+            <button className="text-black" onClick={handleDisRated}>
+              {DisIcon ? (
+                <BiSolidDislike className="w-4 h-4" />
+              ) : (
+                <ThumbsDown className="w-4 h-4" />
+              )}
             </button>
           </div>
         </div>
