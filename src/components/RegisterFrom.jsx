@@ -146,8 +146,8 @@ const RegisterForm = () => {
               name="name"
               className="w-full pl-10 pr-4 py-2 bg-gray-800 border border-gray-700 rounded-md text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition duration-300"
               placeholder="Enter your Name"
-              value={formData.name}
-              onChange={handleChange}
+              value={displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
               required
             />
           </div>
