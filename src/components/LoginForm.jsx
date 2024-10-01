@@ -107,7 +107,6 @@ const LoginForm = () => {
               placeholder="Enter your Email"
               value={formData.email}
               onChange={handleChange}
-              required
             />
           </div>
         </div>
@@ -128,7 +127,6 @@ const LoginForm = () => {
               placeholder="Enter your Password"
               value={formData.password}
               onChange={handleChange}
-              required
             />
           </div>
         </div>
@@ -151,6 +149,7 @@ const LoginForm = () => {
         </p>
         <div className="mt-6">
           <button
+            type="button"
             onClick={handleSignInWithGoogle}
             className="w-full px-4 py-2 bg-white text-gray-900 rounded-md font-medium hover:bg-gray-100 transition duration-300 flex items-center justify-center gap-2"
           >

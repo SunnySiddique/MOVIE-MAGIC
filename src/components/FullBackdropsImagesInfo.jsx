@@ -1,19 +1,24 @@
 import { motion } from "framer-motion";
-import { BiSolidDislike, BiSolidLike } from "react-icons/bi";
+import { ThumbsDown, ThumbsUp } from "lucide-react";
 import { FaLock } from "react-icons/fa";
 import { IoChevronDownOutline } from "react-icons/io5";
+import { toast } from "react-toastify";
 import { useAPI } from "../context/APIContext";
 
 export default function FullBackdropsImagesInfo({ backdropsData }) {
   const { imageUrl } = useAPI();
   const handleOpen = () => window.open(imageUrl + backdropsData?.file_path);
 
+  const handleRated = () => {
+    toast.success("The image has been rated successfully.");
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="max-w-full md:max-w-full lg:max-w-[15rem] mx-auto bg-white rounded-lg overflow-hidden transform hover:scale-105 transition-transform duration-300 shadow-lg hover:shadow-2xl"
+      className="max-w-full md:max-w-full lg:max-w-[15rem] mx-auto bg-white rounded-lg overflow-hidden   shadow-lg hover:shadow-2xl"
     >
       <div className="relative aspect-[16/9] group">
         <img
@@ -24,11 +29,11 @@ export default function FullBackdropsImagesInfo({ backdropsData }) {
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
         <div className="absolute bottom-0 w-full flex justify-center items-center space-x-4">
           <div className="flex space-x-4 items-center justify-between w-full p-4 opacity-0 group-hover:opacity-100 group-hover:bg-[rgba(255,255,255,.7)] transition-opacity duration-300 ">
-            <button className="text-black ">
-              <BiSolidDislike className="w-4 h-4" />
+            <button className="text-black" onClick={handleRated}>
+              <ThumbsUp className="w-4 h-4" />
             </button>
-            <button className="text-black ">
-              <BiSolidLike className="w-4 h-4" />
+            <button className="text-black" onClick={handleRated}>
+              <ThumbsDown className="w-4 h-4" />
             </button>
           </div>
         </div>

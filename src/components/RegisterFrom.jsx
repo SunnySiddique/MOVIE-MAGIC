@@ -108,7 +108,10 @@ const RegisterForm = () => {
 
   return (
     <section className="flex items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-8 min-h-screen">
-      <form className="flex flex-col gap-4 p-8 w-full max-w-md bg-gray-900 rounded-2xl shadow-xl">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-4 p-8 w-full max-w-md bg-gray-900 rounded-2xl shadow-xl"
+      >
         <h2 className="text-center text-2xl font-bold leading-tight text-white">
           Sign up to your account
         </h2>
@@ -149,7 +152,6 @@ const RegisterForm = () => {
               placeholder="Enter your Name"
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
-              required
             />
           </div>
         </div>
@@ -161,13 +163,12 @@ const RegisterForm = () => {
             <Mail className="w-5 h-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
             <input
               id="email"
-              type="email"
+              type="text"
               name="email"
               className="w-full pl-10 pr-4 py-2 bg-gray-800 border border-gray-700 rounded-md text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition duration-300"
               placeholder="Enter your Email"
               value={formData.email}
               onChange={handleChange}
-              required
             />
           </div>
         </div>
@@ -188,7 +189,6 @@ const RegisterForm = () => {
               placeholder="Enter your Password"
               value={formData.password}
               onChange={handleChange}
-              required
             />
           </div>
         </div>
@@ -209,12 +209,10 @@ const RegisterForm = () => {
               placeholder="Confirm Password"
               value={formData.confirmPassword}
               onChange={handleChange}
-              required
             />
           </div>
         </div>
         <button
-          onClick={handleSubmit}
           type="submit"
           className={`mt-6 px-4 py-2 bg-blue-600 text-white rounded-md font-medium ${
             isLoading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"
@@ -231,6 +229,7 @@ const RegisterForm = () => {
         </p>
         <div className="mt-6">
           <button
+            type="button"
             onClick={handleSignInWithGoogle}
             className="w-full px-4 py-2 bg-white text-gray-900 rounded-md font-medium hover:bg-gray-100 transition duration-300 flex items-center justify-center gap-2"
           >
