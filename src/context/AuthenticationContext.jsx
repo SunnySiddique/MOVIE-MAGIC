@@ -21,6 +21,8 @@ export const AuthenticationProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [displayName, setDisplayName] = useState("");
   const [file, setFile] = useState(null);
+  const [fileUrl, setFileUrl] = useState(""); // For storing the uploaded file URL
+  const [uploading, setUploading] = useState(false); // Change to boolean
 
   const navigate = useNavigate();
 
@@ -29,6 +31,8 @@ export const AuthenticationProvider = ({ children }) => {
     password,
     displayName
   ) => {
+    setLoading(true); // Show "Processing" on the sign-up button
+
     try {
       const res = await createUserWithEmailAndPassword(
         firebaseAuth,
@@ -37,46 +41,20 @@ export const AuthenticationProvider = ({ children }) => {
       );
       toast.success("User successfully registered!");
 
-      if (file) {
-        const storageRef = ref(storage, `users/${res.user.uid}/profilePicture`);
-        const uploadTask = uploadBytesResumable(storageRef, file);
-
-        uploadTask.on(
-          "state_changed",
-          (snapshot) => {
-            // Handle progress (optional)
-          },
-          (error) => {
-            console.log(error);
-            toast.error("Error uploading file");
-          },
-          async () => {
-            try {
-              const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-              await updateProfile(res.user, {
-                displayName,
-                photoURL: downloadURL,
-              });
-              setCurrentUser({ ...res.user, photoURL: downloadURL });
-            } catch (error) {
-              console.log(error);
-              toast.error("Error updating profile");
-            }
-          }
-        );
-      } else {
-        await updateProfile(res.user, { displayName });
-        setCurrentUser({ ...res.user, displayName });
-        toast.success("Profile updated successfully!");
-      }
+      await updateProfile(res.user, {
+        displayName,
+        photoURL: fileUrl, // Use the uploaded file URL from state
+      });
+      setCurrentUser({ ...res.user, photoURL: fileUrl });
     } catch (error) {
       if (error.code === "auth/weak-password") {
         toast.error("Password should be at least 6 characters");
       } else if (error.code === "auth/email-already-in-use") {
         toast.error("Email already exists! Kindly use a different email.");
       }
-      console.error("Error during sign up:", error.message);
-      setLoading(false);
+      console.error("Error during sign-up:", error.message);
+    } finally {
+      setLoading(false); // Hide "Processing" after everything is done
     }
   };
 
@@ -93,6 +71,46 @@ export const AuthenticationProvider = ({ children }) => {
     return signInWithPopup(firebaseAuth, googleProvider);
   };
 
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
+
+    if (selectedFile) {
+      setUploading(true); // Start uploading
+      const url = URL.createObjectURL(selectedFile); // Create a URL for the selected file
+      setFileUrl(url);
+
+      const storageRef = ref(storage, `users/${selectedFile.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, selectedFile);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          toast.success(`Upload is ${progress}% done`);
+        },
+        (error) => {
+          console.error(error); // More detailed logging for debugging
+          toast.error("Error uploading image");
+          setUploading(false); // Set uploading to false on error
+        },
+        async () => {
+          try {
+            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+            setFileUrl(downloadURL); // Store the uploaded file URL in state
+            toast.success("Image uploaded successfully!");
+          } catch (error) {
+            console.error(error); // More detailed logging for debugging
+            toast.error("Error getting image URL");
+          } finally {
+            setUploading(false); // Ensure uploading is set to false after process completes
+          }
+        }
+      );
+    }
+  };
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(firebaseAuth, (user) => {
       setCurrentUser(user);
@@ -104,6 +122,7 @@ export const AuthenticationProvider = ({ children }) => {
 
   const value = useMemo(
     () => ({
+      handleFileChange,
       signUpUserWithEmailAndPassword,
       loginInUserWithEmailAndPassword,
       logoutUser,
@@ -113,8 +132,10 @@ export const AuthenticationProvider = ({ children }) => {
       setDisplayName,
       setFile,
       file,
+      fileUrl,
+      uploading,
     }),
-    [currentUser, displayName, file]
+    [currentUser, displayName, file, uploading] // Added uploading to dependencies
   );
 
   return (

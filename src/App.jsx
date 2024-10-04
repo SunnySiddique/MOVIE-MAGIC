@@ -17,7 +17,7 @@ const App = () => {
     // Set loading state
     const loadingTimeout = setTimeout(() => {
       setIsLoading(false);
-    }, 3000);
+    }, 2000);
 
     // Initial check for online status
     if (!isOnline) {
