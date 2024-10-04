@@ -6,11 +6,10 @@ import {
   signOut,
   updateProfile,
 } from "firebase/auth";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { firebaseAuth, googleProvider, storage } from "../../firebase";
+import { firebaseAuth, googleProvider } from "../../Firebase";
 
 const AuthenticationContext = createContext(null);
 
@@ -21,10 +20,14 @@ export const AuthenticationProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [displayName, setDisplayName] = useState("");
   const [file, setFile] = useState(null);
-  const [uploadProgress, setUploadProgress] = useState(0);
+
   const navigate = useNavigate();
 
-  const signUpUserWithEmailAndPassword = async (email, password) => {
+  const signUpUserWithEmailAndPassword = async (
+    email,
+    password,
+    displayName
+  ) => {
     try {
       const res = await createUserWithEmailAndPassword(
         firebaseAuth,
@@ -32,41 +35,18 @@ export const AuthenticationProvider = ({ children }) => {
         password
       );
 
-      if (file) {
-        const storageRef = ref(storage, `users/${res.user.uid}/profilePicture`);
-        const uploadTask = uploadBytesResumable(storageRef, file);
+      // Update the user's profile
+      await updateProfile(res.user, { displayName });
 
-        uploadTask.on(
-          "state_changed",
-          (snapshot) => {
-            const progress =
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            setUploadProgress(progress);
-          },
-          (error) => {
-            console.log(error);
-            toast.error(error.message);
-          },
-          async () => {
-            try {
-              const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-              await updateProfile(res.user, {
-                displayName,
-                photoURL: downloadURL,
-              });
-              setCurrentUser({ ...res.user, photoURL: downloadURL });
-            } catch (error) {
-              console.log(error);
-              toast.error("Error updating profile");
-            }
-          }
-        );
-      } else {
-        await updateProfile(res.user, { displayName });
-        setCurrentUser({ ...res.user, displayName });
-      }
+      // Set the current user state
+      setCurrentUser({ ...res.user, displayName });
+
+      // Show a success message
       toast.success("Registration successful!");
     } catch (error) {
+      console.error(error); // Log error for debugging
+
+      // Handle specific error cases
       if (error.code === "auth/email-already-in-use") {
         toast.error(
           "This email is already in use. Please use a different email."
@@ -110,9 +90,8 @@ export const AuthenticationProvider = ({ children }) => {
       setDisplayName,
       setFile,
       file,
-      uploadProgress,
     }),
-    [currentUser, displayName, file, uploadProgress]
+    [currentUser, displayName, file]
   );
 
   return (

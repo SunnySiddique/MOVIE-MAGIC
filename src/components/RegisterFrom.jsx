@@ -72,7 +72,6 @@ const RegisterForm = () => {
     try {
       setIsLoading(true);
       await signUpUserWithEmailAndPassword(formData.email, formData.password);
-      setFormData({ email: "", password: "" });
       setDisplayName("");
       setFile(null);
     } catch (error) {
