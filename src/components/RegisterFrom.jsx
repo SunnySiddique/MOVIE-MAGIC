@@ -38,7 +38,7 @@ const RegisterForm = () => {
 
     // Check for empty fields
     const emptyFields = [];
-    if (!file) emptyFields.push("Please upload a profile image first!");
+    if (!file) emptyFields.push("upload a profile image first!");
     if (!displayName) emptyFields.push("Name");
     if (!formData.email) emptyFields.push("Email");
     if (!formData.password) emptyFields.push("Password");

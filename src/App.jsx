@@ -1,53 +1,46 @@
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
 import { useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "swiper/css";
 import Loader from "./components/loader/Loader";
+import OfflineNotification from "./components/OfflineNotification";
 import Content from "./routes/Content";
 
 const App = () => {
   const location = useLocation(); // Get current path
 
   const [isLoading, setIsLoading] = useState(true);
-  const [isOnline, setIsOnline] = useState(navigator.onLine); // Set initial online status
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [showNotification, setShowNotification] = useState(false);
 
   useEffect(() => {
-    // Set loading state
     const loadingTimeout = setTimeout(() => {
       setIsLoading(false);
     }, 2000);
 
-    // Initial check for online status
-    if (!isOnline) {
-      toast.error(
-        "You're currently offline. Some features may not be available."
-      );
-    }
-
-    const handleStatusChange = () => {
-      const onlineStatus = navigator.onLine;
-      setIsOnline(onlineStatus);
-      if (onlineStatus) {
-        toast.success("You are back online! Enjoy browsing.");
-      } else {
-        toast.error(
-          "You're currently offline. Some features may not be available."
-        );
-      }
+    const handleOnline = () => {
+      setIsOnline(true);
+      setShowNotification(true);
+      setTimeout(() => setShowNotification(false), 7000); // auto-hide after 5 seconds
     };
 
-    window.addEventListener("online", handleStatusChange);
-    window.addEventListener("offline", handleStatusChange);
+    const handleOffline = () => {
+      setIsOnline(false);
+      setShowNotification(true);
+    };
 
-    // Cleanup event listeners and timeout
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
     return () => {
       clearTimeout(loadingTimeout);
-      window.removeEventListener("online", handleStatusChange);
-      window.removeEventListener("offline", handleStatusChange);
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
     };
   }, []);
+
+  const closeNotification = () => setShowNotification(false);
 
   if (
     isLoading &&
@@ -59,13 +52,15 @@ const App = () => {
   return (
     <div>
       <ToastContainer position="top-right" />
-      {isOnline ? (
+      {showNotification && (
+        <OfflineNotification
+          isOnline={isOnline}
+          closeNotification={closeNotification}
+        />
+      )}
+      {isOnline && (
         <div className="mb-24 md:mb-0">
           <Content isLoading={setIsLoading} />
-        </div>
-      ) : (
-        <div className="fixed bottom-0 left-0 right-0 bg-red-600 text-white p-4 text-center">
-          {`You're currently offline. Some features may not be available.`}
         </div>
       )}
     </div>
