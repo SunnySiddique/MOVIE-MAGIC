@@ -24,6 +24,7 @@ const RegisterForm = () => {
     fileUrl,
     handleFileChange,
     uploading,
+    setFileUrl,
   } = useAuthentication();
   const navigate = useNavigate();
 
@@ -80,6 +81,7 @@ const RegisterForm = () => {
       );
       setDisplayName("");
       setFile(null);
+      setFileUrl(null);
     } catch (error) {
       console.log(error.message);
     } finally {

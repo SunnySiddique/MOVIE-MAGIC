@@ -31,8 +31,6 @@ export const AuthenticationProvider = ({ children }) => {
     password,
     displayName
   ) => {
-    setLoading(true); // Show "Processing" on the sign-up button
-
     try {
       const res = await createUserWithEmailAndPassword(
         firebaseAuth,
@@ -53,8 +51,6 @@ export const AuthenticationProvider = ({ children }) => {
         toast.error("Email already exists! Kindly use a different email.");
       }
       console.error("Error during sign-up:", error.message);
-    } finally {
-      setLoading(false); // Hide "Processing" after everything is done
     }
   };
 
@@ -88,7 +84,7 @@ export const AuthenticationProvider = ({ children }) => {
         (snapshot) => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          toast.success(`Upload is ${progress}% done`);
+          toast.success(`Upload is ${progress.toFixed(0)}% done`);
         },
         (error) => {
           console.error(error); // More detailed logging for debugging
@@ -134,6 +130,7 @@ export const AuthenticationProvider = ({ children }) => {
       file,
       fileUrl,
       uploading,
+      setFileUrl,
     }),
     [currentUser, displayName, file, uploading] // Added uploading to dependencies
   );
