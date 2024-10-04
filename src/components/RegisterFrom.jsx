@@ -12,7 +12,6 @@ const RegisterForm = () => {
     confirmPassword: "",
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [fileUrl, setFileUrl] = useState(null); // State to hold the file URL
 
   const {
     signUpUserWithEmailAndPassword,
@@ -22,6 +21,8 @@ const RegisterForm = () => {
     file,
     currentUser,
     signInWithGoogle,
+    fileUrl,
+    handleFileChange,
   } = useAuthentication();
   const navigate = useNavigate();
 
@@ -71,7 +72,11 @@ const RegisterForm = () => {
 
     try {
       setIsLoading(true);
-      await signUpUserWithEmailAndPassword(formData.email, formData.password);
+      await signUpUserWithEmailAndPassword(
+        formData.email,
+        formData.password,
+        displayName
+      );
       setDisplayName("");
       setFile(null);
     } catch (error) {
@@ -86,16 +91,6 @@ const RegisterForm = () => {
       await signInWithGoogle();
     } catch (error) {
       toast.error(error.message);
-    }
-  };
-
-  const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    setFile(selectedFile);
-
-    if (selectedFile) {
-      const url = URL.createObjectURL(selectedFile); // Create a URL for the selected file
-      setFileUrl(url);
     }
   };
 

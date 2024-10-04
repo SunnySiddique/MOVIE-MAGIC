@@ -6,10 +6,11 @@ import {
   signOut,
   updateProfile,
 } from "firebase/auth";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { firebaseAuth, googleProvider } from "../../Firebase";
+import { firebaseAuth, googleProvider, storage } from "../../Firebase";
 
 const AuthenticationContext = createContext(null);
 
@@ -34,26 +35,48 @@ export const AuthenticationProvider = ({ children }) => {
         email,
         password
       );
+      toast.success("User successfully registered!");
 
-      // Update the user's profile
-      await updateProfile(res.user, { displayName });
+      if (file) {
+        const storageRef = ref(storage, `users/${res.user.uid}/profilePicture`);
+        const uploadTask = uploadBytesResumable(storageRef, file);
 
-      // Set the current user state
-      setCurrentUser({ ...res.user, displayName });
-
-      // Show a success message
-      toast.success("Registration successful!");
-    } catch (error) {
-      console.error(error); // Log error for debugging
-
-      // Handle specific error cases
-      if (error.code === "auth/email-already-in-use") {
-        toast.error(
-          "This email is already in use. Please use a different email."
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            // Handle progress (optional)
+          },
+          (error) => {
+            console.log(error);
+            toast.error("Error uploading file");
+          },
+          async () => {
+            try {
+              const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+              await updateProfile(res.user, {
+                displayName,
+                photoURL: downloadURL,
+              });
+              setCurrentUser({ ...res.user, photoURL: downloadURL });
+            } catch (error) {
+              console.log(error);
+              toast.error("Error updating profile");
+            }
+          }
         );
       } else {
-        toast.error("Error creating user: " + error.message);
+        await updateProfile(res.user, { displayName });
+        setCurrentUser({ ...res.user, displayName });
+        toast.success("Profile updated successfully!");
       }
+    } catch (error) {
+      if (error.code === "auth/weak-password") {
+        toast.error("Password should be at least 6 characters");
+      } else if (error.code === "auth/email-already-in-use") {
+        toast.error("Email already exists! Kindly use a different email.");
+      }
+      console.error("Error during sign up:", error.message);
+      setLoading(false);
     }
   };
 

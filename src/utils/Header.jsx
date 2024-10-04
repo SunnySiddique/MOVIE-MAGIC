@@ -103,6 +103,8 @@ export default function Header() {
   const toggleGenreDropdown = () => {
     setShowGenreDropdown(!showGenreDropdown);
   };
+
+  console.log(currentUser);
   return (
     <>
       <header className="fixed top-0 w-full z-[99] bg-gradient-to-r from-purple-900 via-indigo-900 to-blue-900 shadow-lg">
