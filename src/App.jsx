@@ -59,7 +59,7 @@ const App = () => {
         />
       )}
       {isOnline && (
-        <div className="mb-24 md:mb-0">
+        <div className="container mx-auto mb-24 md:mb-0">
           <Content isLoading={setIsLoading} />
         </div>
       )}

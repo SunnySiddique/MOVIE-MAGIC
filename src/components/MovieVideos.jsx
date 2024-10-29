@@ -91,7 +91,7 @@ const MovieVideos = ({ movieVideosData, handleViewAllClick }) => {
             {movieVideosData?.results?.length > 4 && (
               <SwiperSlide className="w-4/5 md:w-1/2 lg:w-1/3">
                 <div
-                  className="w-full aspect-video bg-gray-200 rounded-lg flex items-center justify-center"
+                  className="w-full h-[23vh] bg-gray-200 rounded-lg flex items-center justify-center"
                   onClick={handleViewAllClick}
                 >
                   <button className="bg-blue-500 text-white py-2 px-4 rounded-lg">
@@ -110,8 +110,8 @@ const MovieVideos = ({ movieVideosData, handleViewAllClick }) => {
                     direction="prev"
                     onClick={() => swiperRef.current?.slidePrev()}
                     isVisible={navigationEnabled}
-                    // top="calc(50% - 35px)" // Adjust as necessary
-                    // transform="translateY(-50%)"
+                    top="25%"
+                    transform="translateY(25%)"
                   />
                 )}
               </AnimatePresence>
@@ -120,8 +120,8 @@ const MovieVideos = ({ movieVideosData, handleViewAllClick }) => {
                 direction="next"
                 onClick={() => swiperRef.current?.slideNext()}
                 isVisible={navigationEnabled}
-                // top="calc(50% - 35px)" // Adjust as necessary
-                // transform="translateY(-50%)"
+                top="25%"
+                transform="translateY(25%)"
               />
             </>
           )}

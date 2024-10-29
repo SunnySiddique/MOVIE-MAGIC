@@ -18,7 +18,7 @@ const CarouselCard = ({ data = [], heading, trending, media_type }) => {
   const handleMouseEnter = () => setIsHovering(true);
   const handleMouseLeave = () => setIsHovering(false);
   return (
-    <div className="container mx-auto my-10 p-4">
+    <div className="app  my-10 p-4">
       <h2 className="text-2xl lg:text-4xl font-extrabold mb-5 drop-shadow-2xl">
         {heading}
       </h2>
@@ -56,7 +56,7 @@ const CarouselCard = ({ data = [], heading, trending, media_type }) => {
         </style>
         <Swiper
           slidesPerView={"auto"}
-          spaceBetween={30}
+          spaceBetween={50}
           modules={[Navigation]}
           navigation={false}
           onSwiper={(swiper) => {

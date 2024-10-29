@@ -82,3 +82,23 @@ body {
     transform: translateY(0px);
   }
 }
+@media (min-width: 768px) {
+  .app {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  .app {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 1200px) {
+  .app {
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+}

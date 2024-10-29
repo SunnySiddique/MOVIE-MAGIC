@@ -110,7 +110,7 @@ const DetailPage = () => {
         />
       </div>
 
-      <div className="container mx-auto px-4 lg:px-8 mt-16">
+      <div className="app px-4 lg:px-8 mt-16">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
