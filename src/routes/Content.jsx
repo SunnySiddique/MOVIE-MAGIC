@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import AllReviews from "../components/AllReviews";
 import AllVideosAndPosters from "../components/AllVideosAndPosters";
 import DisplayAllSeason from "../components/DisplayAllSeason";
@@ -13,6 +13,8 @@ import SearchPage from "../pages/SearchPage";
 import Header from "../utils/Header";
 
 const Content = () => {
+  const location = useLocation(); 
+
   return (
     <div>
       {location.pathname !== "/login" && location.pathname !== "/register" && (

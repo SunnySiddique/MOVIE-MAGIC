@@ -12,6 +12,7 @@ const App = () => {
 
   useEffect(() => {
 
+
     const handleOnline = () => {
       setIsOnline(true);
       setShowNotification(true);
@@ -34,9 +35,7 @@ const App = () => {
 
   const closeNotification = () => setShowNotification(false);
 
-
   return (
-    
     <div>
       <ToastContainer position="top-right" />
       {showNotification && (
