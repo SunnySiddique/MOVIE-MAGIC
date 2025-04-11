@@ -31,6 +31,7 @@ export default function Header() {
   const location = useLocation();
   const genreDropdownRef = useRef(null);
 
+console.log(currentUser)
   useEffect(() => {
     const query = searchParams.get("q") || "";
     setSearchInput(query);
@@ -103,10 +104,9 @@ export default function Header() {
   const toggleGenreDropdown = () => {
     setShowGenreDropdown(!showGenreDropdown);
   };
-
-  console.log(currentUser);
   return (
     <>
+    {/* <img src={currentUser.photoURL} alt="" /> */}
       <header className="fixed top-0 w-full z-[99] bg-gradient-to-r from-purple-900 via-indigo-900 to-blue-900 shadow-lg">
         <div className="container mx-auto px-2 sm:px-4 ">
           <div className="flex justify-between items-center py-4 md:py-3 sm:py-4">
@@ -205,10 +205,16 @@ export default function Header() {
                     aria-expanded={showUserMenu}
                   >
                     <img
-                      src={currentUser.photoURL || profilePic}
-                      alt={currentUser.displayName || "User's profile"}
-                      className="w-[50px] h-[50px] rounded-full"
-                    />
+                    src={currentUser?.photoURL || profilePic}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = profilePic;
+                    }}
+                    alt={currentUser.displayName || "User's profile"}
+                    className="w-[50px] h-[50px] rounded-full"
+                  />
+
+                   
                   </button>
                   <AnimatePresence>
                     {showUserMenu && (

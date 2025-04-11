@@ -5,6 +5,7 @@ import { useState } from "react";
 const styles = `
   .notification-container {
     position: fixed;
+    z-index: 999;
     bottom: 20px;
     right: 20px;
     max-width: 300px;
@@ -89,7 +90,7 @@ export default function OfflineNotification({ isOnline, closeNotification }) {
     setTimeout(() => {
       setIsVisible(false); // Hide notification after exit animation completes
       closeNotification(); // Call the passed closeNotification function
-    }, 300); // Match this duration with the exit animation duration
+    }, 3000); // Match this duration with the exit animation duration
   };
 
   return (
@@ -97,7 +98,7 @@ export default function OfflineNotification({ isOnline, closeNotification }) {
       <style>{styles}</style>
       {isVisible && (
         <motion.div
-          className={`notification-container`}
+          className={`notification-container `}
           initial="hidden"
           animate={isExiting ? "exit" : "visible"}
           exit="exit"

@@ -1,4 +1,4 @@
-import { FileImage, Lock, Mail, User } from "lucide-react";
+import { Lock, Mail, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -17,18 +17,11 @@ const RegisterForm = () => {
     signUpUserWithEmailAndPassword,
     displayName,
     setDisplayName,
-    setFile,
-    file,
     currentUser,
     signInWithGoogle,
-    fileUrl,
-    handleFileChange,
-    uploading,
-    setFileUrl,
   } = useAuthentication();
   const navigate = useNavigate();
 
-  // Handle input change dynamically
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -39,7 +32,6 @@ const RegisterForm = () => {
 
     // Check for empty fields
     const emptyFields = [];
-    if (!file) emptyFields.push("upload a profile image first!");
     if (!displayName) emptyFields.push("Name");
     if (!formData.email) emptyFields.push("Email");
     if (!formData.password) emptyFields.push("Password");
@@ -80,8 +72,7 @@ const RegisterForm = () => {
         displayName
       );
       setDisplayName("");
-      setFile(null);
-      setFileUrl(null);
+
     } catch (error) {
       console.log(error.message);
     } finally {
@@ -112,29 +103,7 @@ const RegisterForm = () => {
         <h2 className="text-center text-2xl font-bold leading-tight text-white">
           Sign up to your account
         </h2>
-        <div className="flex flex-col items-center">
-          {fileUrl ? (
-            <img
-              src={fileUrl}
-              alt="Uploaded"
-              className="mt-4 w-[120px] h-[80px] object-cover rounded-md shadow-lg auth-image"
-            />
-          ) : (
-            <div className="w-24 h-24 bg-gray-700 rounded-full flex items-center justify-center text-gray-400">
-              <User className="w-12 h-12" />
-            </div>
-          )}
-          <label className="mt-4 px-4 py-2 bg-gray-800 text-white rounded-md cursor-pointer hover:bg-gray-700 transition duration-300 flex items-center gap-2">
-            <input
-              type="file"
-              className="hidden"
-              onChange={handleFileChange}
-              accept="image/*"
-            />
-            <FileImage className="w-5 h-5" />
-            Choose a file
-          </label>
-        </div>
+   
         <div className="flex flex-col gap-1">
           <label htmlFor="name" className="text-sm font-medium text-gray-300">
             Name
@@ -211,18 +180,9 @@ const RegisterForm = () => {
         </div>
         <button
           type="submit"
-          className={`mt-6 px-4 py-2 bg-blue-600 text-white rounded-md font-medium ${
-            uploading || isLoading
-              ? "opacity-50 cursor-not-allowed"
-              : "hover:bg-blue-700"
-          } transition duration-300`}
-          disabled={uploading || isLoading} // Disable button when uploading or loading
+          className={`mt-6 px-4 py-2 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 transition duration-300` }
         >
-          {uploading
-            ? "Uploading image..." // Show this while image is uploading
-            : isLoading
-            ? "Signing up..." // Show this while form is submitting
-            : "Sign up"}
+          {isLoading? "Signing up..." : "Sign Up"}
         </button>
         <p className="mt-4 text-center text-sm text-gray-400">
           Have an account? Click below to sign in{" "}

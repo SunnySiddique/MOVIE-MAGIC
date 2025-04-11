@@ -17,3 +17,4 @@ const storage = getStorage(firebaseApp);
 const googleProvider = new GoogleAuthProvider();
 
 export { firebaseAuth, googleProvider, storage };
+

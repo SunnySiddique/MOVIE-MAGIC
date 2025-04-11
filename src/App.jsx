@@ -1,23 +1,16 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "swiper/css";
-import Loader from "./components/loader/Loader";
 import OfflineNotification from "./components/OfflineNotification";
 import Content from "./routes/Content";
 
 const App = () => {
-  const location = useLocation(); // Get current path
 
-  const [isLoading, setIsLoading] = useState(true);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [showNotification, setShowNotification] = useState(false);
 
   useEffect(() => {
-    const loadingTimeout = setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
 
     const handleOnline = () => {
       setIsOnline(true);
@@ -34,7 +27,6 @@ const App = () => {
     window.addEventListener("offline", handleOffline);
 
     return () => {
-      clearTimeout(loadingTimeout);
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
     };
@@ -42,14 +34,9 @@ const App = () => {
 
   const closeNotification = () => setShowNotification(false);
 
-  if (
-    isLoading &&
-    location.pathname !== "/login" &&
-    location.pathname !== "/register"
-  ) {
-    return <Loader />;
-  }
+
   return (
+    
     <div>
       <ToastContainer position="top-right" />
       {showNotification && (
@@ -60,7 +47,7 @@ const App = () => {
       )}
       {isOnline && (
         <div className="container mx-auto mb-24 md:mb-0">
-          <Content isLoading={setIsLoading} />
+          <Content  />
         </div>
       )}
     </div>

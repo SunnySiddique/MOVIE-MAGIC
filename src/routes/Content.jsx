@@ -12,7 +12,7 @@ import Home from "../pages/Home";
 import SearchPage from "../pages/SearchPage";
 import Header from "../utils/Header";
 
-const Content = ({ isLoading }) => {
+const Content = () => {
   return (
     <div>
       {location.pathname !== "/login" && location.pathname !== "/register" && (
@@ -38,7 +38,7 @@ const Content = ({ isLoading }) => {
           element={<AllVideosAndPosters />}
         />
 
-        <Route path="/login" element={<LoginForm setALoading={isLoading} />} />
+        <Route path="/login" element={<LoginForm  />} />
         <Route path="/register" element={<RegisterForm />} />
       </Routes>
     </div>
